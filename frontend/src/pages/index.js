@@ -1,0 +1,5 @@
+export { default as Home } from "./Home"
+export { default as Discover } from "./Discover"
+export { default as Profile } from "./Profile"
+export { default as ProjectDetails } from "./ProjectDetails"
+export { default as CreateProject } from "./CreateProject"
