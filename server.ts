@@ -2,8 +2,7 @@ import express from "express"
 import { connectDB } from "./backend/database/db"
 import { errorHandler } from "./backend/middleware/errorMiddleware"
 import { PORT } from "./backend/utils/config"
-import * as Colors from 'colors.ts'
-Colors.colors( '','' )
+
 const cors = require("cors")
 
 connectDB()

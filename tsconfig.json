@@ -1,5 +1,7 @@
 {
 	"compilerOptions": {
+		"strict": true,
+		"esModuleInterop": true,
 		"useUnknownInCatchVariables": false,
 		"outDir": "./dist"
 	}
