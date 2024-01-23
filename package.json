@@ -2,10 +2,12 @@
 	"name": "auxilium",
 	"version": "1.0.0",
 	"description": "Auxilium a platform for user to create their project and raise funds for them.",
-	"main": "index.js",
+	"type": "module",
+	"main": "server.ts",
 	"scripts": {
-		"start": "node backend/server.ts",
-		"dev": "nodemon backend/server.ts"
+		"build": "tsc",
+    	"start": "node ./dist/server.js",
+		"dev": "nodemon server.ts"
 	},
 	"author": "john michael julve",
 	"license": "ISC",
