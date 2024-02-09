@@ -1,7 +1,6 @@
 import { model } from "mongoose";
-import userSchema from "./schema/userSchema";
-import { UserType } from "../types/userTypes";
+import userSchema, { IUserSchema } from "./schema/userSchema";
 
-const UserModel = model<UserType>("User", userSchema); //IProjectchema supposed to be
+const UserModel = model<IUserSchema>("User", userSchema); 
 
-export default UserModel;
+module.exports = {UserModel}

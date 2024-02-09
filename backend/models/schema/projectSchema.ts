@@ -5,16 +5,11 @@ export interface IProjectSchema extends ProjectType {
 	_id: Types.ObjectId;
 }
 
-const projectSchema = new Schema<ProjectType>(
+const projectSchema = new Schema<IProjectSchema>(
 	{
-		name: {
-			type: String,
-			required: true,
-		},
 		title: {
 			type: String,
-			required: true,	
-			unique: true,
+			required: true,
 		},
 		description: {
 			type: String,
@@ -32,6 +27,23 @@ const projectSchema = new Schema<ProjectType>(
 			type: String,
 			required: true,
 		},
+		user_id: {
+			type: String,
+			required: true
+		},
+		raised: {
+			type: Number,
+		},
+		contributor: [{
+			type: String,
+		}],
+		team: [{
+			type: String,
+		}],
+		contact: [{
+			type: String,
+		}],
+		
 	},
 	{
 		timestamps: true,

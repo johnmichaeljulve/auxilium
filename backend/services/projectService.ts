@@ -1,14 +1,19 @@
+import mongoose from "mongoose";
 import { checkIfValidObjectId } from "../database/db";
 import ProjectModel from "../models/projectModel";
-import { IProjectSchema } from "../models/schema/projectSchema";
+import projectSchema, { IProjectSchema } from "../models/schema/projectSchema";
 import { sanitizeProject } from "../sanitizers/projectSanitizer";
 import { ProjectType } from "../types/projectTypes";
 
+interface userId {
+	_id: mongoose.Types.ObjectId
+}
 
-export async function getProjects(): Promise<ProjectType[]> {
+
+export async function getProjects(): Promise<IProjectSchema[]> {
 	try {
-		const projects = await ProjectModel.find();
-		if(!projects) throw new Error("No projects found")
+		const projects = await ProjectModel.find().sort({updatedAt: -1});
+		if(!projects) throw new Error("No Project found!")
 
 		return projects;
 	} catch (err) {
@@ -16,11 +21,10 @@ export async function getProjects(): Promise<ProjectType[]> {
 	}
 }
 
-export async function createProject(project: ProjectType): Promise<IProjectSchema> {
-	const sanitizedProject = project //sanitize
+export async function createProject(project: ProjectType, user_id: userId): Promise<IProjectSchema> {
+	const sanitizedProject = {...project, user_id} //sanitize
 	try	{
 		const createdProject = await ProjectModel.create(sanitizedProject)
-		if(!createdProject) throw new Error("Project not a created")
 		
 		return createdProject
 	}catch (err){
@@ -28,13 +32,12 @@ export async function createProject(project: ProjectType): Promise<IProjectSchem
 	}
 }
 
-export async function getProject(projectId: string): Promise<IProjectSchema> {
-	checkIfValidObjectId(projectId)
+export async function getProject(user_id: userId): Promise<IProjectSchema[]> {
 	try {
-		const project = await ProjectModel.findById(projectId)
-		if(!project) throw new Error("NO Project found!")
+		const projects = await ProjectModel.find({ user_id }).sort({updatedAt: -1});
+		if(!projects) throw new Error("No Project found!")
 		
-		return project 
+		return projects 
 	}catch( err ){
 		throw new Error("Error Project not found!")
 	}
@@ -45,7 +48,7 @@ export async function updateProject(projectId: string, project: ProjectType): Pr
 	const sanitizedProject = sanitizeProject(project)
 	try{
 		const updatedProject = await ProjectModel.findByIdAndUpdate(projectId, sanitizedProject, {new: true})
-		if(!updatedProject) throw new Error("NO Project found!")
+		if(!updatedProject) throw new Error("No Project found!")
 
 		return updatedProject
 	}catch (err){
@@ -57,7 +60,7 @@ export async function deleteProject(projectId: string): Promise<void> {
 	checkIfValidObjectId(projectId)
 	try{
 		const deletedProject = await ProjectModel.findByIdAndDelete(projectId)
-		if(!deletedProject) throw new Error("NO Project found!")
+		if(!deletedProject) throw new Error("No Project found!")
 
 	}catch ( err ){
 		throw new Error("Error Project not deleted!")

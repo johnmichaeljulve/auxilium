@@ -13,10 +13,10 @@ export const calculateBarPercentage = (target, raisedAmount) => {
 
 export const checkIfImage = (url, callback) => {
     const img = new Image()
+    img.onload = () => callback(true)
+    img.onerror = () => callback(false)
     img.src = url
 
     if(img.complete) callback(true)
 
-    img.onload = () => callback(true)
-    img.onerror = () => callback(false)
 }

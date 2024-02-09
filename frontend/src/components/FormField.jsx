@@ -18,7 +18,7 @@ const formField = ({
 					onChange={handleChange}
                     rows={10}
                     placeholder={placeHolder}
-					className="outline-none border-[1px] text-black rounded-[4px]"
+					className="outline-none border-[1px] text-black rounded-[4px] w-96"
 				/>
 			) : (
 				<input

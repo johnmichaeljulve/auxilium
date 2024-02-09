@@ -1,25 +1,41 @@
 import { useState } from "react";
 import "./App.css";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { Navbar } from "./components";
-import { Discover, CreateProject, ProjectDetails, Profile, Home } from "./pages";
+import { useUserContext } from "./hooks/userUserContext";
+import {
+	Discover,
+	CreateProject,
+	ProjectDetails,
+	Profile,
+	Home,
+	AboutUs,
+	Login,
+	Signup,
+} from "./pages";
+import MyProjects from "./pages/MyProjects";
 function App() {
+	const { user } = useUserContext();
 	return (
 		<>
-			<div className="bg-[#2F3038] min-h-screen text-white">
+			<div className="bg-[#2F3038] flex flex-col min-h-screen text-white">
 				<Navbar />
-
 				<Routes>
 					<Route index element={<Home />}></Route>
 					<Route path="/discover" element={<Discover />}></Route>
+					<Route path="/my-projects" element={user ? <MyProjects /> : <Navigate to="/login"/>}></Route>
 					<Route
 						path="/create-project"
-						element={<CreateProject />}
+						element={user ? <CreateProject /> : <Navigate to="/login" />}
 					></Route>
 					<Route
 						path="/project-details/:id"
 						element={<ProjectDetails />}
 					></Route>
+					<Route path="/about-us" element={<AboutUs />}></Route>
+					<Route path="/profile" element={user ? <Profile /> : <Navigate to="/login" />}></Route>
+					<Route path="/login" element={!user ? <Login /> : <Navigate to="/profile" />}></Route>
+					<Route path="/signup" element={!user ? <Signup /> : <Navigate to="/profile" />}></Route>
 				</Routes>
 			</div>
 		</>

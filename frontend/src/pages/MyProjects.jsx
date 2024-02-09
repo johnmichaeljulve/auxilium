@@ -2,23 +2,28 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { Banner, DisplayProjects } from "../components";
 import { client } from "../API"
-import { useProjectContext } from "../hooks/useProjectContext";
+import { useUserContext } from "../hooks/userUserContext";
 
-const Discover = () => {
+const MyProjects = () => {
 	const [isLoading, setIsLoading] = useState(false)
 	const [error, setError] = useState();
-	const {projects, dispatch} = useProjectContext()
+    const [projects, setProjects] = useState([]);
+    const {user} = useUserContext()
 	
 	const fetchProjects = async () => {
 		
 		try{
 			setIsLoading(true)
-			const response = await client.get('/projects')
+			const response = await client.get('/projects/my-projects/', {
+				headers: {
+					'Authorization': `Bearer ${user.token}`
+				}
+			})
 			const projectData = response.data
-			dispatch({type: 'SET_PROJECT', payload: projectData})
+            setProjects(projectData)
 			setIsLoading(false)
 		}catch(err){
-			setError("Error - 503 Backend Fetch Failed")
+			setError("Error - 503 Backend Fetch Failed: " + err )
 		}
 	}
 
@@ -28,7 +33,7 @@ const Discover = () => {
 
 	return (
 		<div className="">
-			<Banner text="Discover Projects" searchBar/>
+			<Banner text="My Projects" searchBar/>
 			
 			<DisplayProjects 
 				isLoading = {isLoading}
@@ -39,4 +44,4 @@ const Discover = () => {
 	)
 };
 
-export default Discover;
+export default MyProjects;

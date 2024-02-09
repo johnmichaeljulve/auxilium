@@ -1,31 +1,22 @@
 import { Response, Request } from "express";
-import { createUser, deleteUser, getUser, getUsers, updateUser } from "../services/userService";
+import { createUser, deleteUser, loginUser, updateUser } from "../services/userService";
 const asyncHandler = require("express-async-handler");
 
-//@desc Get all users
-//@route GET /api/users
-//@access Public
-const getUsersHandler = asyncHandler(async (req: Request, res: Response) => {
-	const users = await getUsers();
-
-	res.status(200).json(users);
-});
-
-//@desc Get user by id
+//@desc Login user by req.body
 //@route GET /api/users/:id
 //@access Public
-const getUserHandler = asyncHandler(async (req: Request, res: Response) => {
-	const user = await getUser(req.params.id)
+const loginUserHandler = asyncHandler(async (req: Request, res: Response) => {
+	const user = await loginUser(req.body)
 	res.status(200).json(user);
 });
 
 //@desc Create a user
 //@route POST /api/users/:id
-//@access Private
+//@access Public
 const createUserHandler = asyncHandler(
 	async (req: Request, res: Response) => {
 		const createdUser = await createUser(req.body)
-
+		
 		res.status(201).json(createdUser);
 	}
 );
@@ -58,9 +49,8 @@ const deleteUserHandler = asyncHandler(
 );
 
 module.exports = {
-	getUsersHandler,
-	getUserHandler,
 	createUserHandler,
 	updateUserHandler,
 	deleteUserHandler,
+	loginUserHandler,
 };

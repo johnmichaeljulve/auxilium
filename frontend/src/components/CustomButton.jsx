@@ -1,9 +1,9 @@
 import React from 'react'
 
-const CustomButton = () => {
+const CustomButton = ({text, style, handleClick, disabled, type="button"}) => {
   return (
-    <button className='border-2 border-black bg-black px-2 rounded-md'>
-      Search
+    <button className={`px-2 rounded-md w-[100px] h-10 text-center font-thin tracking-wider text-base ${style}`} onClick={handleClick} disabled={disabled} type={type}>
+      {text}
     </button>
   )
 }

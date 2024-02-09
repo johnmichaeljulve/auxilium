@@ -1,6 +1,11 @@
 import { Response, Request } from "express";
+import mongoose from "mongoose";
 import { createProject, deleteProject, getProject, getProjects, updateProject } from "../services/projectService";
 const asyncHandler = require("express-async-handler");
+
+interface IGetUserAuthInfoRequest extends Request {
+	user: mongoose.Types.ObjectId;
+}
 
 //@desc Get all projects
 //@route GET /api/projects
@@ -12,10 +17,10 @@ const getProjectsHandler = asyncHandler(async (req: Request, res: Response) => {
 });
 
 //@desc Get project by id
-//@route GET /api/projects/:id
-//@access Public
-const getProjectHandler = asyncHandler(async (req: Request, res: Response) => {
-	const project = await getProject(req.params.id)
+//@route GET /api/projects/my-projects
+//@access Private
+const getProjectHandler = asyncHandler(async (req: IGetUserAuthInfoRequest, res: Response) => {
+	const project = await getProject( req.user._id )
 	
 	res.status(200).json(project);
 });
@@ -24,8 +29,8 @@ const getProjectHandler = asyncHandler(async (req: Request, res: Response) => {
 //@route POST /api/projects/:id
 //@access Private
 const createProjectHandler = asyncHandler(
-	async (req: Request, res: Response) => {
-		const createdProject = await createProject(req.body)
+	async (req: IGetUserAuthInfoRequest, res: Response) => {
+		const createdProject = await createProject(req.body, req.user._id)
 
 		res.status(201).json(createdProject);
 	}

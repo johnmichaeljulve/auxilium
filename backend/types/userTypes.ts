@@ -1,8 +1,7 @@
 export interface UserType {
-    username: string;
+    name: string;
     email: string;
     password: string;
-    isAdmin: boolean;
     resetPasswordToken: string;
     resetPasswordExpires: Date;
 }

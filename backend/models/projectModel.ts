@@ -1,7 +1,6 @@
 import { model } from "mongoose";
-import projectSchema from "./schema/projectSchema";
-import { ProjectType } from "../types/projectTypes";
+import projectSchema, { IProjectSchema } from "./schema/projectSchema";
 
-const ProjectModel = model<ProjectType>("Project", projectSchema); //IProjectchema supposed to be
+const ProjectModel = model<IProjectSchema>("Project", projectSchema); //IProjectchema supposed to be
 
 export default ProjectModel;

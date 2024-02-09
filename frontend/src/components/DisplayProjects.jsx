@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { ProjectCard } from ".";
+import {loader} from '../assets'
 
 const DisplayProjects = ({ isLoading, projects, error }) => {
 	const navigate = useNavigate();
@@ -10,9 +11,9 @@ const DisplayProjects = ({ isLoading, projects, error }) => {
 	};
 
 	return (
-		<div>
-			<div className=" flex flex-wrap gap-[35px] mt-[10px] justify-center">
-				{error ? <p>{error}</p> : isLoading && <p>Loading</p> }
+		<div className="">
+			<div className=" flex flex-wrap gap-[55px] mt-[20px] justify-center">
+				{error ? <p>{error}</p> : isLoading && <img src={loader} alt="Loading" className="w-[100px] h-[100px] object-contain" />}
 				
 
 				{!isLoading && projects.length === 0 && (

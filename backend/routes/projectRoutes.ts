@@ -1,9 +1,21 @@
-import express from 'express'
-const router = express.Router()
-const {getProjectsHandler, getProjectHandler, createProjectHandler, updateProjectHandler, deleteProjectHandler} = require("../controllers/projectControllers")
+import express from "express";
+const router = express.Router();
+const {
+	getProjectsHandler,
+	getProjectHandler,
+	createProjectHandler,
+	updateProjectHandler,
+	deleteProjectHandler,
+} = require("../controllers/projectControllers");
 
-router.route("/").get(getProjectsHandler).post(createProjectHandler)
+const requireAuth = require("../middleware/requireAuth");
 
-router.route("/:id").get(getProjectHandler).put(updateProjectHandler).delete(deleteProjectHandler)
+router.route("/").get(getProjectsHandler);
 
-module.exports = router
+router.use(requireAuth);
+
+router.route("/my-projects").get(getProjectHandler);
+router.route("/").post(createProjectHandler);
+router.route("/:id").put(updateProjectHandler).delete(deleteProjectHandler);
+
+module.exports = router;

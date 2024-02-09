@@ -12,7 +12,7 @@ app.use(cors())
 app.use(express.json())
 
 app.use('/api/projects', require('./backend/routes/projectRoutes'))
-app.use('/api/users', require('./backend/routes/userRoutes'))
+app.use('/api/user', require('./backend/routes/userRoutes'))
 
 app.use(errorHandler)
  
