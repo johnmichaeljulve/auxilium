@@ -7,7 +7,7 @@ const DisplayProjects = ({ isLoading, projects, error }) => {
 	const navigate = useNavigate();
 
 	const handleNavigate = (project) => {
-		navigate(`/project-details/${project._id}`, { state: project });
+		navigate(`/project/${project._id}`, { state: project });
 	};
 
 	return (

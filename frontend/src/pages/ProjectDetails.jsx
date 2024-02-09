@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { client } from "../API";
@@ -7,10 +8,27 @@ import { useUserContext } from "../hooks/userUserContext";
 import { calculateBarPercentage, daysLeft } from "../utils";
 
 const ProjectDetails = () => {
-	const { state } = useLocation();
+	let { state } = useLocation();
 	const navigate = useNavigate();
 	const [isLoading, setIsLoading] = useState(false);
 	const { user } = useUserContext();
+	const [projectData, setProjectData] = useState(null);
+
+	const fetchProjects = async () => {
+		try{
+			setIsLoading(true)
+			const response = await client.get(`/projects/${state._id}`)
+			const json = await response.data
+			setProjectData(json)
+			setIsLoading(false)
+		}catch(err){
+			console.log(err)
+		}
+	}
+
+	useEffect(() => {
+		fetchProjects()
+	}, [])
 
 	const handleClick = async () => {
 		try {
@@ -26,7 +44,30 @@ const ProjectDetails = () => {
 			console.log(err);
 		}
 	};
-	// {user?._id === state.user_id && <CustomButton text="Delete" handleClick={handleClick} style="bg-black"/>}
+
+	const fundProject = async () => {
+		try {
+			setIsLoading(true);
+			const updatedState = await client.put(
+				`/projects/${state._id}`,
+				{
+					...state,
+					raised: projectData.raised + 1,
+				},
+				{
+					headers: {
+						Authorization: `Bearer ${user.token}`,
+					},
+				}
+			);
+			setProjectData(updatedState.data.updatedProject)
+			console.log(projectData)
+			setIsLoading(false);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	return (
 		<div className="mt-10">
 			{isLoading ? (
@@ -36,29 +77,51 @@ const ProjectDetails = () => {
 					<div className="flex flex-col text-black">
 						<div className=" w-72 h-56 bg-white rounded-md flex flex-col items-center ">
 							<h1 className="">Team</h1>
-							<p className="py-3">John Michael julve</p>
-							<p className="py-3">John Michael julve</p>
+							{projectData?.team.map((name) => {
+								return (
+									<p className="py-3" key={name}>
+										{name}
+									</p>
+								);
+							})}
 						</div>
 						<div className="bg-white rounded-md mt-3 px-2">
 							<p className="flex justify-end text-xs mt-2">
-								Funded {calculateBarPercentage(state.target, 1)}
+								Funded{" "}
+								{calculateBarPercentage(
+									projectData?.target,
+									projectData?.raised
+								)}
 								%
 							</p>
 							<div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
 								<div
 									className="bg-[#669999] h-2.5 rounded-full"
-									style={{ width: `40%` }}
+									style={{
+										width: `${
+											calculateBarPercentage(
+												projectData?.target,
+												projectData?.raised
+											) > 100
+												? 100
+												: calculateBarPercentage(
+														projectData?.target,
+														projectData?.raised
+												  )
+										}%`,
+									}}
 								></div>
 							</div>
-							<p>Raised: ₱ 1</p>
-							<p>Goal: ₱ {state.target}</p>
+							<p>Raised: ₱ {projectData?.raised}</p>
+							<p>Goal: ₱ {projectData?.target}</p>
 							<p>
-								Deadline: {daysLeft(state.deadline)} Days Left
+								Deadline: {daysLeft(projectData?.deadline)} Days Left
 							</p>
 							<div className="flex justify-end my-1">
 								<CustomButton
 									text="Fund"
 									style="bg-[#669999] text-white"
+									handleClick={fundProject}
 								/>
 							</div>
 						</div>
@@ -69,9 +132,17 @@ const ProjectDetails = () => {
 						<div className="flex flex-col">
 							<h1>Project name</h1>
 							<h1>Description</h1>
-              <img src={state.image} alt="" />
+							<img src={projectData?.image} alt="" />
 						</div>
 					</div>
+
+					{/* {user?._id === projectData.user_id && (
+						<CustomButton
+							text="Delete"
+							handleClick={handleClick}
+							style="bg-black"
+						/>
+					)} */}
 				</div>
 			)}
 		</div>

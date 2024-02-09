@@ -20,9 +20,11 @@ export async function getProjects(): Promise<IProjectSchema[]> {
 		throw new Error("Error Project not found!");
 	}
 }
+//todo
+// fix mongo db saving the additional data
 
-export async function createProject(project: ProjectType, user_id: userId): Promise<IProjectSchema> {
-	const sanitizedProject = {...project, user_id} //sanitize
+export async function createProject(project: ProjectType, user_id: userId, user_name: String): Promise<IProjectSchema> {
+	const sanitizedProject = {...project, user_id, raised: 0, contributor: [], team: [user_name], contact: []} //sanitize
 	try	{
 		const createdProject = await ProjectModel.create(sanitizedProject)
 		
@@ -32,11 +34,10 @@ export async function createProject(project: ProjectType, user_id: userId): Prom
 	}
 }
 
-export async function getProject(user_id: userId): Promise<IProjectSchema[]> {
+export async function getProject(user_id: string): Promise<IProjectSchema> {
 	try {
-		const projects = await ProjectModel.find({ user_id }).sort({updatedAt: -1});
+		const projects = await ProjectModel.findById(user_id);
 		if(!projects) throw new Error("No Project found!")
-		
 		return projects 
 	}catch( err ){
 		throw new Error("Error Project not found!")
@@ -45,7 +46,8 @@ export async function getProject(user_id: userId): Promise<IProjectSchema[]> {
 
 export async function updateProject(projectId: string, project: ProjectType): Promise<IProjectSchema>{
 	checkIfValidObjectId(projectId)
-	const sanitizedProject = sanitizeProject(project)
+	console.log(project)
+	const sanitizedProject = project
 	try{
 		const updatedProject = await ProjectModel.findByIdAndUpdate(projectId, sanitizedProject, {new: true})
 		if(!updatedProject) throw new Error("No Project found!")

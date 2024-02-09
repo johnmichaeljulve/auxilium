@@ -4,7 +4,7 @@ import { createProject, deleteProject, getProject, getProjects, updateProject } 
 const asyncHandler = require("express-async-handler");
 
 interface IGetUserAuthInfoRequest extends Request {
-	user: mongoose.Types.ObjectId;
+	user: {_id: mongoose.Types.ObjectId, name: String};
 }
 
 //@desc Get all projects
@@ -17,10 +17,10 @@ const getProjectsHandler = asyncHandler(async (req: Request, res: Response) => {
 });
 
 //@desc Get project by id
-//@route GET /api/projects/my-projects
+//@route GET /api/projects/:id
 //@access Private
-const getProjectHandler = asyncHandler(async (req: IGetUserAuthInfoRequest, res: Response) => {
-	const project = await getProject( req.user._id )
+const getProjectHandler = asyncHandler(async (req: Request, res: Response) => {
+	const project = await getProject( req.params.id )
 	
 	res.status(200).json(project);
 });
@@ -30,7 +30,7 @@ const getProjectHandler = asyncHandler(async (req: IGetUserAuthInfoRequest, res:
 //@access Private
 const createProjectHandler = asyncHandler(
 	async (req: IGetUserAuthInfoRequest, res: Response) => {
-		const createdProject = await createProject(req.body, req.user._id)
+		const createdProject = await createProject(req.body, req.user._id, req.user.name)
 
 		res.status(201).json(createdProject);
 	}
@@ -44,8 +44,7 @@ const updateProjectHandler = asyncHandler(
 		const updatedProject = await updateProject(req.params.id, req.body)
 
 		res.status(202).json({
-			message: `Project with ID of ${req.params.id} is updated`,
-			"Project Information": updatedProject,
+			updatedProject
 		});
 	}
 );

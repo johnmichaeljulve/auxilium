@@ -10,11 +10,10 @@ const Discover = () => {
 	const {projects, dispatch} = useProjectContext()
 	
 	const fetchProjects = async () => {
-		
 		try{
 			setIsLoading(true)
 			const response = await client.get('/projects')
-			const projectData = response.data
+			const projectData = await response.data
 			dispatch({type: 'SET_PROJECT', payload: projectData})
 			setIsLoading(false)
 		}catch(err){

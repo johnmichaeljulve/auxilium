@@ -20,7 +20,7 @@ const requireAuth = async (req: IGetUserAuthInfoRequest, res: Response, next: Ne
 
 	try {
 		const { _id } = jwt.verify(token, SECRET);
-		req.user = await UserModel.findById({ _id }).select("_id");
+		req.user = await UserModel.findById({ _id }).select("_id name");
 		next();
 	} catch (err) {
 		res.status(401).json({ error: "Request is not authorized" });
