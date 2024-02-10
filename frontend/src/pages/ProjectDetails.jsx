@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import { useRef } from "react";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { client } from "../API";
 import { CustomButton } from "../components";
 import { useUserContext } from "../hooks/userUserContext";
+import { ProjectDetailsModal } from "../modal";
 import { calculateBarPercentage, daysLeft } from "../utils";
 
 const ProjectDetails = () => {
@@ -13,24 +15,25 @@ const ProjectDetails = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const { user } = useUserContext();
 	const [projectData, setProjectData] = useState(null);
+	const dialogRef = useRef(null);
 
 	const fetchProjects = async () => {
-		try{
-			setIsLoading(true)
-			const response = await client.get(`/projects/${state._id}`)
-			const json = await response.data
-			setProjectData(json)
-			setIsLoading(false)
-		}catch(err){
-			console.log(err)
+		try {
+			setIsLoading(true);
+			const response = await client.get(`/projects/${state._id}`);
+			const json = await response.data;
+			setProjectData(json);
+			setIsLoading(false);
+		} catch (err) {
+			console.log(err);
 		}
-	}
+	};
 
 	useEffect(() => {
-		fetchProjects()
-	}, [])
+		fetchProjects();
+	}, []);
 
-	const handleClick = async () => {
+	const handleDelete = async () => {
 		try {
 			setIsLoading(true);
 			await client.delete(`/projects/${state._id}`, {
@@ -46,6 +49,11 @@ const ProjectDetails = () => {
 	};
 
 	const fundProject = async () => {
+		if (!user) {
+			alert("Login first.");
+			navigate("/login");
+			return;
+		}
 		try {
 			setIsLoading(true);
 			const updatedState = await client.put(
@@ -60,12 +68,19 @@ const ProjectDetails = () => {
 					},
 				}
 			);
-			setProjectData(updatedState.data.updatedProject)
-			console.log(projectData)
+			setProjectData(updatedState.data.updatedProject);
 			setIsLoading(false);
 		} catch (error) {
 			console.log(error);
 		}
+	};
+
+	const toggleDialog = () => {
+		if (!dialogRef.current) return;
+
+		dialogRef.current.hasAttribute("open")
+			? dialogRef.current.close()
+			: dialogRef.current.showModal();
 	};
 
 	return (
@@ -115,14 +130,34 @@ const ProjectDetails = () => {
 							<p>Raised: ₱ {projectData?.raised}</p>
 							<p>Goal: ₱ {projectData?.target}</p>
 							<p>
-								Deadline: {daysLeft(projectData?.deadline)} Days Left
+								Deadline: {daysLeft(projectData?.deadline)} Days
+								Left
 							</p>
 							<div className="flex justify-end my-1">
 								<CustomButton
 									text="Fund"
 									style="bg-[#669999] text-white"
-									handleClick={fundProject}
+									handleClick={toggleDialog}
 								/>
+								<dialog
+									ref={dialogRef}
+									onClick={(e) => {
+										if (e.currentTarget === e.target)
+											toggleDialog();
+									}}
+								>
+									<ProjectDetailsModal />
+									<CustomButton
+										text="Donate"
+										style="bg-[#669999] text-white"
+										handleClick={fundProject}
+									/>
+									<CustomButton
+										text="Close"
+										style="bg-[#669999] text-white"
+										handleClick={toggleDialog}
+									/>
+								</dialog>
 							</div>
 						</div>
 						<div className="bg-white opacity-70">contact</div>
