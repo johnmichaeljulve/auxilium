@@ -38,7 +38,8 @@ const MyProjects = () => {
 			<DisplayProjects 
 				isLoading = {isLoading}
 				projects = {projects}
-				error = {error}
+				error = {error} 
+
 			/>
 		</div>
 	)

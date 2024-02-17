@@ -11,6 +11,7 @@ const CustomInput = ({ text, type = "text", handleChange, value, name }) => {
 				onChange={handleChange}
 				value={value}
 				name={name}
+				// required
 			/>
 		</>
 	);

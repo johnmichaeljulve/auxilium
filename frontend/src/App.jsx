@@ -14,10 +14,13 @@ import {
 	Signup,
 } from "./pages";
 import MyProjects from "./pages/MyProjects";
+import { Toaster } from 'sonner'
+
 function App() {
 	const { user } = useUserContext();
 	return (
 		<>
+			<Toaster richColors position="top-center" />
 			<div className="bg-[#2F3038] flex flex-col min-h-screen text-white">
 				<Navbar />
 				<Routes>

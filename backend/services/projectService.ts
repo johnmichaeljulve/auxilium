@@ -12,7 +12,7 @@ interface userId {
 
 export async function getProjects(): Promise<IProjectSchema[]> {
 	try {
-		const projects = await ProjectModel.find().sort({updatedAt: -1});
+		const projects = await ProjectModel.find().sort({createdAt: -1});
 		if(!projects) throw new Error("No Project found!")
 
 		return projects;

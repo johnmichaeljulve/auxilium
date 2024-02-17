@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { box } from "../assets";
 import { CustomInput } from "../components";
 import { useSignup } from "../hooks/useSignUp";
+import { toast } from 'sonner'
 
 
 const Signup = () => {
@@ -26,10 +27,12 @@ const Signup = () => {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-
-		await signup(`${formData.firstName} ${formData.lastName}`, formData.email, formData.password)
+		const user = await signup(`${formData.firstName} ${formData.lastName}`, formData.email, formData.password)
 		e.target.reset()
-		navigate("/login")
+		if(user){
+			toast.success("Account created successfully.")
+			navigate("/login")
+		}
 	};
 
 	return (
@@ -49,13 +52,15 @@ const Signup = () => {
 					<CustomInput text="Password:" type="password" handleChange={handleChange} name="password"/>
 					<CustomInput text="Re-Enter Password" type="password" handleChange={handleChange} name="confirmPassword"/>
 				</div>
+				<div className="flex">
+				<p className="w-64">{error}</p>
 				<input
 					disabled={isLoading}
 					type="submit"
 					className="bg-[#202027] rounded-lg mt-5 mb-1 mr-1 w-28 text-center p-2 font-thin tracking-wider text-base cursor-pointer place-self-end"
 					value="Sign up"
 				/>
-				{error && (<p>{error}</p>)}
+				</div>
 			</form>
 		</div>
 	);

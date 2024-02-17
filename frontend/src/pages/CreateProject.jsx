@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { checkIfImage } from "../utils";
 import { loader } from "../assets";
 import { useUserContext } from "../hooks/userUserContext";
+import { toast } from "sonner";
 
 const CreateProject = () => {
 	const navigate = useNavigate();
@@ -38,6 +39,7 @@ const CreateProject = () => {
 					await createProject(form);
 					setIsLoading(false);
 					navigate("/my-projects");
+					toast.success("Project created successfully.")
 				} catch (err) {
 					console.log(err);
 					setIsLoading(false);

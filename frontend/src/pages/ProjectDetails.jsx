@@ -3,6 +3,7 @@ import { useRef } from "react";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import { client } from "../API";
 import { CustomButton } from "../components";
 import { useUserContext } from "../hooks/userUserContext";
@@ -50,8 +51,7 @@ const ProjectDetails = () => {
 
 	const fundProject = async () => {
 		if (!user) {
-			alert("Login first.");
-			navigate("/login");
+			toast.info("Login first.")
 			return;
 		}
 		try {

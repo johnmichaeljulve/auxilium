@@ -4,7 +4,6 @@ import { CustomButton, CustomInput } from "../components";
 import { useUserContext } from "../hooks/userUserContext";
 import { useNavigate } from "react-router-dom";
 import { useLogin } from "../hooks/useLogin";
-import { set } from "mongoose";
 
 const Login = () => {
 	const { login, isLoading, error } = useLogin();

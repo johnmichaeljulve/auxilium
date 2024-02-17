@@ -47,7 +47,7 @@ export async function createUser(user: UserType): Promise<IUserSchema> {
 		const token = createToken(createdUser._id)
 		return {...createdUser._doc, token}
 	}catch (err){
-		throw new Error("Error User not created: " + err.message)
+		throw new Error(err.message)
 	}
 }
 
