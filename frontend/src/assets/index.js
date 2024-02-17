@@ -1,4 +1,4 @@
-import  logo from './Logo.png'
+import  logo from './logo.png'
 import  loader from './loader.svg'
 import  background from './background.png'
 import  box from './box.png'
