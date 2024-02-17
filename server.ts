@@ -2,6 +2,7 @@ import express from "express"
 import { connectDB } from "./backend/database/db"
 import { errorHandler } from "./backend/middleware/errorMiddleware"
 import { PORT } from "./backend/utils/config"
+require('dotenv').config()
 
 const cors = require("cors")
 
