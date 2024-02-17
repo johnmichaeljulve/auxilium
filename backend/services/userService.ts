@@ -8,7 +8,8 @@ import mongoose from "mongoose";
 import {SECRET} from '../utils/config'
 
 const createToken = (_id: mongoose.Types.ObjectId) => {
-	return jwt.sign({_id}, {secret: SECRET}, {expiresIn: '1d'})
+	const secret = {secretOrPrivateKey: SECRET}
+	return jwt.sign({_id}, secret, {expiresIn: '1d'})
 }
 
 export async function getUsers(): Promise<UserType[]> {
