@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { box } from "../assets";
 import { CustomInput } from "../components";
-import { useSignup } from "../hooks/useSignUp";
+import { useSignup } from "../hooks/useSignup";
 import { toast } from 'sonner'
 
 

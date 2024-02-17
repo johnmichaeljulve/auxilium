@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { client } from "../API";
-import { useUserContext } from "./userUserContext";
 
 export const useSignup = () => {
 	const [error, setError] = useState(null);
