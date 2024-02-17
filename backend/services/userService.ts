@@ -8,7 +8,6 @@ import mongoose from "mongoose";
 import {SECRET} from '../utils/config'
 
 const createToken = (_id: mongoose.Types.ObjectId) => {
-	console.log(SECRET)
 	return jwt.sign({_id}, SECRET, {expiresIn: '1d'})
 }
 

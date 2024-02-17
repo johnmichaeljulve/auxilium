@@ -11,7 +11,7 @@ const MyProjects = () => {
     const {user} = useUserContext()
 	
 	const fetchProjects = async () => {
-		
+		console.log("fetch")
 		try{
 			setIsLoading(true)
 			const response = await client.get('/projects/my-projects/', {

@@ -9,7 +9,6 @@ interface userId {
 	_id: mongoose.Types.ObjectId
 }
 
-
 export async function getProjects(): Promise<IProjectSchema[]> {
 	try {
 		const projects = await ProjectModel.find().sort({createdAt: -1});
@@ -34,13 +33,24 @@ export async function createProject(project: ProjectType, user_id: userId, user_
 	}
 }
 
-export async function getProject(user_id: string): Promise<IProjectSchema> {
+export async function getProject(project_id: string): Promise<IProjectSchema> {
 	try {
-		const projects = await ProjectModel.findById(user_id);
+		const projects = await ProjectModel.findById(project_id);
 		if(!projects) throw new Error("No Project found!")
 		return projects 
 	}catch( err ){
 		throw new Error("Error Project not found!")
+	}
+}
+
+export async function getMyProject(user_id: userId): Promise<IProjectSchema[]> {
+	try {
+		const projects = await ProjectModel.find({user_id}).sort({updatedAt: -1})
+		if(!projects) throw new Error("No Project Found!")
+		
+		return projects
+	} catch (error) {
+		throw new Error("Error Project not Foud!")
 	}
 }
 
